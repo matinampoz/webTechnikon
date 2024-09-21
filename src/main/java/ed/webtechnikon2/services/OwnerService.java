@@ -16,10 +16,10 @@ public class OwnerService implements Service<Owner, Long>{
     @Inject
     private   OwnerRepository ownerRepository;
 
-    @Override
-    public Long create(Owner owner) throws OwnerException {
-        ownerRepository.create(owner);
-        return owner.getOwnerId();
-    }
+//    @Override
+//    public Long create(Owner owner) throws OwnerException {
+//        ownerRepository.create(owner);
+//        return owner.getOwnerId();
+//    }
     
 }

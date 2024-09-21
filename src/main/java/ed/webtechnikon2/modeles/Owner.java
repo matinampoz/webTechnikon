@@ -1,6 +1,7 @@
 package ed.webtechnikon2.modeles;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ed.webtechnikon2.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,8 +33,8 @@ public class Owner {
     private String address;
     private long phoneNumber;
     private String email;
-    private String username;
     private String password;
+    private UserType userType = UserType.OWNER;
 
     @JsonIgnore
     @OneToMany(mappedBy = "propertyOwner")

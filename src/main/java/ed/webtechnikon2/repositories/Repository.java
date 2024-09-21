@@ -11,7 +11,7 @@ public interface Repository<T, K> {
 
     //List<T> findAll();
 
-    T create(T t);
+    //T create(T t);
     
     //T findById(K k);
 

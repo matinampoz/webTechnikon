@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author matin
  */
 @Slf4j
-@Path("/home")
+@Path("Owner")
 public class OwnerResource {
     @Inject
     private OwnerService ownerService;
@@ -29,19 +29,19 @@ public class OwnerResource {
         return "welcome to technikon";
     }
     
-    @Path("add")
-    @POST
-    @Consumes("application/json")
-    @Produces("application/json")
-    public Owner createOwner(Owner owner) {
-        log.debug("property owner= " + owner.getName());
-        try {
-            ownerService.create(owner);
-            return owner;
-        } catch (OwnerException ex) {
-            Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return new Owner(); //edw na to allaksw
-    }
+//    @Path("add")
+//    @POST
+//    @Consumes("application/json")
+//    @Produces("application/json")
+//    public Owner createOwner(Owner owner) {
+//        log.debug("property owner= " + owner.getName());
+//        try {
+//            ownerService.create(owner);
+//            return owner;
+//        } catch (OwnerException ex) {
+//            Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return new Owner(); //edw na to allaksw
+//    }
 
 }

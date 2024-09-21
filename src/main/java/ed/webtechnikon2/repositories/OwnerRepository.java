@@ -24,11 +24,11 @@ public class OwnerRepository implements Repository<Owner, Long>{
         return Owner.class.getName();
     }
     
-    @Override
-    @Transactional
-    public Owner create(Owner owner) {
-        entityManager.persist(owner);
-        return owner;
-    }
+//    @Override
+//    @Transactional
+//    public Owner create(Owner owner) {
+//        entityManager.persist(owner);
+//        return owner;
+//    }
     
 }

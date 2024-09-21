@@ -8,7 +8,7 @@ import java.util.List;
  */
 public interface Service<T, K> {
 
-    K create(T t) throws Exception;
+    //K create(T t) throws Exception;
 
     //K update(T t);
     //List<T> getAll();
