@@ -4,24 +4,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import ed.webtechnikon2.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  *
  * @author matin
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 public class Owner {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long ownerId;
@@ -34,6 +33,8 @@ public class Owner {
     private long phoneNumber;
     private String email;
     private String password;
+
+    @Enumerated(EnumType.STRING)
     private UserType userType = UserType.OWNER;
 
     @JsonIgnore
