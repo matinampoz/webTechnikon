@@ -6,9 +6,11 @@ import exceptions.RepairException;
 import exceptions.WebApplicationException;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
@@ -33,10 +35,10 @@ public class RepairResource {
         return repairService.getAll();
     }
     
-    @Path("repair/{repairId}")
+    @Path("{repairId}")
     @GET
     @Produces("text/json")
-    public Repair getRepairById(Long repairId) throws  WebApplicationException {
+    public Repair getRepairById(@PathParam ("repairId") Long repairId) throws  WebApplicationException {
         try {
             return repairService.findById(repairId);
         } catch (RepairException ex) {
@@ -58,5 +60,13 @@ public class RepairResource {
         repairService.create(repair);
         return repair.getRepairId();
 
+    }
+    
+    @Path("delete/{repairId}")
+    @DELETE
+    @Consumes("application/json")
+    @Produces("application/json")
+    public boolean delete(@PathParam("repairId") Long repairId) throws RepairException {
+        return repairService.delete(repairId);
     }
 }

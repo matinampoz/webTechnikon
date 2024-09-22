@@ -37,8 +37,15 @@ public class PropertyService implements Service<Property, Long>{
                           .orElseThrow(() -> new PropertyException("id not found"));
     
     }
+
     
-    
+    @Override
+    public boolean delete(Long id) throws PropertyException {
+        if (id == null) {
+            throw new PropertyException("Invalid id");
+        }
+        return propertyRepository.deleteById(id);
+    }
     
     
 }

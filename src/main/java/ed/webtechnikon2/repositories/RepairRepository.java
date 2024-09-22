@@ -54,6 +54,21 @@ public class RepairRepository implements Repository<Repair, Long>{
              return Optional.empty();  
         }
     }
+
+     @Override
+    public boolean deleteById(Long id) {
+        Repair repair = entityManager.find(Repair.class, id);
+        if (repair != null) {
+            try {
+                repair.setDeleted(true);
+                entityManager.merge(repair);
+            } catch (Exception e) {
+                System.out.println("An exception occurred");
+            }
+            return true;
+        }
+        return false;
+    }
     
     
     

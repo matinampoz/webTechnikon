@@ -14,5 +14,5 @@ public interface Service<T, K> {
     //K update(T t);
     List<T> getAll();
     T findById(K k) throws Exception;
-    //boolean delete(K k);
+    boolean delete(K k) throws Exception;
 }

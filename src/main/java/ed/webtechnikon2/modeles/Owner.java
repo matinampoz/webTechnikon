@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.List;
 import lombok.Data;
+import lombok.Setter;
 
 /**
  *
@@ -19,6 +20,7 @@ import lombok.Data;
  */
 @Data
 @Entity
+@Setter
 public class Owner {
 
     @Id
@@ -40,4 +42,11 @@ public class Owner {
     @JsonIgnore
     @OneToMany(mappedBy = "propertyOwner")
     List<Property> properties;
+    
+    private boolean isDeleted;
+
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+    
 }

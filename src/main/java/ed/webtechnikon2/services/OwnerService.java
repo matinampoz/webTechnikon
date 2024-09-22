@@ -32,7 +32,29 @@ public class OwnerService implements Service<Owner, Long>{
                           .orElseThrow(() -> new OwnerException("id not found"));
     
     }
+    
+    public Owner findOwnerByVat(String vatNumber) throws OwnerException {
+        if (vatNumber == null) {
+            throw new OwnerException("Invalid vat number");
+        }
+        return ownerRepository.findOwnerByVat(vatNumber);
+    }
 
+    public Owner findOwnerByEmail(String email) throws OwnerException {
+        if (email == null || !email.contains("@")) {
+            throw new OwnerException("Invalid email");
+        }
+        return ownerRepository.findOwnerByEmail(email);
+    }
+    
+    @Override
+    public boolean delete(Long id) throws OwnerException {
+        if (id == null) {
+            throw new OwnerException("Invalid id");
+        }
+        return ownerRepository.deleteById(id);
+    }
+    
     @Override
     public Long create(Owner owner) throws OwnerException {
         ownerRepository.create(owner);

@@ -16,11 +16,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RequestScoped
-public class OwnerRepository implements Repository<Owner, Long>{
+public class OwnerRepository implements Repository<Owner, Long> {
 
     @PersistenceContext(unitName = "Persistence")
     private EntityManager entityManager;
-    
+
     private Class<Owner> getEntityClass() {
         return Owner.class;
     }
@@ -28,7 +28,7 @@ public class OwnerRepository implements Repository<Owner, Long>{
     private String getEntityClassName() {
         return Owner.class.getName();
     }
-    
+
     @Override
     @Transactional
     public List findAll() {
@@ -44,17 +44,43 @@ public class OwnerRepository implements Repository<Owner, Long>{
             return Optional.of(t);
         } catch (Exception e) {
             log.debug("An exception occured", e);
-             return Optional.empty();  
+            return Optional.empty();
         }
     }
-    
-    
-    
+
+    @Transactional
+    public Owner findOwnerByVat(String vat) {
+        TypedQuery<Owner> typedQuery = entityManager.createQuery("from Owner where vat =: data", Owner.class);
+        typedQuery.setParameter("data", vat);
+        return typedQuery.getSingleResult();
+    }
+
+    @Transactional
+    public Owner findOwnerByEmail(String email) {
+        TypedQuery<Owner> typedQuery = entityManager.createQuery("from Owner where email =: data", Owner.class);
+        typedQuery.setParameter("data", email);
+        return typedQuery.getSingleResult();
+    }
+
     @Override
     @Transactional
     public Owner create(Owner owner) {
         entityManager.persist(owner);
         return owner;
     }
-    
+
+    @Override
+    public boolean deleteById(Long id) {
+        Owner owner = entityManager.find(Owner.class, id);
+        if (owner != null) {
+            try {
+                owner.setDeleted(true);
+                entityManager.merge(owner);
+            } catch (Exception e) {
+                System.out.println("An exception occurred");
+            }
+            return true;
+        }
+        return false;
+    }
 }

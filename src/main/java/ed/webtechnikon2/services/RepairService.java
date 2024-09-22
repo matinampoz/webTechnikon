@@ -37,7 +37,16 @@ public class RepairService implements Service<Repair, Long>{
                           .orElseThrow(() -> new RepairException("id not found"));
     
     }
+
+
     
     
+    @Override
+    public boolean delete(Long id) throws RepairException {
+        if (id == null) {
+            throw new RepairException("Invalid id");
+        }
+        return repairRepository.deleteById(id);
+    }
     
 }

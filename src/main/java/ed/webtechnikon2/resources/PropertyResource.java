@@ -6,9 +6,11 @@ import exceptions.PropertyException;
 import exceptions.WebApplicationException;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
@@ -34,10 +36,10 @@ public class PropertyResource {
         return propertyService.getAll();
     }
     
-    @Path("property/{propertyId}")
+    @Path("{propertyId}")   
     @GET
     @Produces("text/json")
-    public Property getPropertyById(Long propertyId) throws  WebApplicationException {
+    public Property getPropertyById(@PathParam ("propertyId") Long propertyId) throws  WebApplicationException {
         try {
             return propertyService.findById(propertyId);
         } catch (PropertyException ex) {
@@ -60,4 +62,13 @@ public class PropertyResource {
         return property.getPropertyId();
 
     }
+    
+    @Path("delete/{propertyId}")
+    @DELETE
+    @Consumes("application/json")
+    @Produces("application/json")
+    public boolean delete(@PathParam("propertyId") Long propertyId) throws PropertyException{
+        return propertyService.delete(propertyId);
+    }
+    
 }

@@ -16,5 +16,5 @@ public interface Repository<T, K> {
     
     Optional<T> findById(K k);
 
-    //boolean deleteById(K id);
+    boolean deleteById(K id);
 }

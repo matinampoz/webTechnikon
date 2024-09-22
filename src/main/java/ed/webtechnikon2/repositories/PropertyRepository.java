@@ -54,8 +54,23 @@ public class PropertyRepository implements Repository<Property, Long>{
              return Optional.empty();  
         }
     }
+
+  
     
-    
+    @Override
+    public boolean deleteById(Long id) {
+        Property property = entityManager.find(Property.class, id);
+        if (property != null) {
+            try {
+                property.setDeleted(true);
+                entityManager.merge(property);
+            } catch (Exception e) {
+                System.out.println("An exception occurred");
+            }
+            return true;
+        }
+        return false;
+    }
     
     
 }

@@ -43,5 +43,7 @@ public class Property {
     @JsonIgnore
     @OneToMany(mappedBy = "property")
     private List<Repair> repairs;
+    
+    private boolean isDeleted;
 
 }
