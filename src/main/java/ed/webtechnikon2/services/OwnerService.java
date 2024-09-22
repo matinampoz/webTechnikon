@@ -6,7 +6,6 @@ import exceptions.OwnerException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import java.util.List;
-import java.util.Optional;
 
 /**
  *
@@ -29,14 +28,10 @@ public class OwnerService implements Service<Owner, Long>{
             throw new OwnerException("Invalid id");
         }
         
-        Optional<Owner> owner = ownerRepository.findById(k);
-        if (owner.isPresent()) {
-            return owner.get();
-        }
-        throw new OwnerException("id not found");
+        return ownerRepository.findById(k)
+                          .orElseThrow(() -> new OwnerException("id not found"));
+    
     }
-    
-    
 
     @Override
     public Long create(Owner owner) throws OwnerException {

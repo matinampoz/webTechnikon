@@ -25,9 +25,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class Property {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long propertyId;
+
     private String e9;
     private String address;
     private int yearOfConstruction;
@@ -35,7 +37,7 @@ public class Property {
     private PropertyType typeOfProperty;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "ownerId")
+    @JoinColumn(name = "ownerId", referencedColumnName = "ownerId")
     private Owner propertyOwner;
 
     @JsonIgnore

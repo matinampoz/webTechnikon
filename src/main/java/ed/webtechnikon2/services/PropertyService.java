@@ -2,6 +2,7 @@ package ed.webtechnikon2.services;
 
 import ed.webtechnikon2.modeles.Property;
 import ed.webtechnikon2.repositories.PropertyRepository;
+import exceptions.PropertyException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import java.util.List;
@@ -16,18 +17,25 @@ public class PropertyService implements Service<Property, Long>{
     private PropertyRepository propertyRepository;
 
     @Override
-    public Long create(Property t) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Long create(Property property) throws PropertyException {
+        propertyRepository.create(property);
+        return property.getPropertyId();
     }
 
     @Override
     public List<Property> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return propertyRepository.findAll();
     }
 
     @Override
-    public Property findById(Long k) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Property findById(Long k) throws PropertyException{
+        if (k == null) {
+            throw new PropertyException("Invalid id");
+        }
+        
+        return propertyRepository.findById(k)
+                          .orElseThrow(() -> new PropertyException("id not found"));
+    
     }
     
     

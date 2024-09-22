@@ -4,6 +4,8 @@ import ed.webtechnikon2.modeles.Repair;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -18,20 +20,39 @@ public class RepairRepository implements Repository<Repair, Long>{
     
     @PersistenceContext(unitName = "Persistence")
     private EntityManager entityManager;
+    
+    private Class<Repair> getEntityClass() {
+        return Repair.class;
+    }
 
-    @Override
-    public Repair create(Repair t) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private String getEntityClassName() {
+        return Repair.class.getName();
     }
 
     @Override
-    public List<Repair> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    @Transactional
+    public Repair create(Repair repair) {
+        entityManager.persist(repair);
+        return repair;
     }
 
     @Override
-    public Optional<Repair> findById(Long k) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    @Transactional
+    public List findAll() {
+        TypedQuery<Repair> query
+                = entityManager.createQuery("from " + getEntityClassName(), getEntityClass());
+        return query.getResultList();
+    }
+
+    @Override
+    public Optional<Repair> findById(Long id) {
+        try {
+            Repair t = entityManager.find(getEntityClass(), id);
+            return Optional.of(t);
+        } catch (Exception e) {
+            log.debug("An exception occured", e);
+             return Optional.empty();  
+        }
     }
     
     

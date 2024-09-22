@@ -4,6 +4,8 @@ import ed.webtechnikon2.modeles.Property;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -18,19 +20,39 @@ public class PropertyRepository implements Repository<Property, Long>{
     @PersistenceContext(unitName = "Persistence")
     private EntityManager entityManager;
 
-    @Override
-    public Property create(Property t) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private Class<Property> getEntityClass() {
+        return Property.class;
     }
 
+    private String getEntityClassName() {
+        return Property.class.getName();
+    }
+    
     @Override
-    public List<Property> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    @Transactional
+    public List findAll() {
+        TypedQuery<Property> query
+                = entityManager.createQuery("from " + getEntityClassName(), getEntityClass());
+        return query.getResultList();
+    }
+    
+    @Override
+    @Transactional
+    public Property create(Property property) {
+        entityManager.persist(property);
+        return property;
     }
 
+
     @Override
-    public Optional<Property> findById(Long k) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Optional<Property> findById(Long id) {
+        try {
+            Property t = entityManager.find(getEntityClass(), id);
+            return Optional.of(t);
+        } catch (Exception e) {
+            log.debug("An exception occured", e);
+             return Optional.empty();  
+        }
     }
     
     

@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
-import static java.lang.Math.log;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +43,7 @@ public class OwnerRepository implements Repository<Owner, Long>{
             Owner t = entityManager.find(getEntityClass(), id);
             return Optional.of(t);
         } catch (Exception e) {
-            log.debug("An exception occured");
+            log.debug("An exception occured", e);
              return Optional.empty();  
         }
     }
