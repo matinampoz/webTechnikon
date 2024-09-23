@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RequestScoped
-public class PropertyRepository implements Repository<Property, Long>{
+public class PropertyRepository implements Repository<Property, Long> {
+
     @PersistenceContext(unitName = "Persistence")
     private EntityManager entityManager;
 
@@ -27,7 +29,7 @@ public class PropertyRepository implements Repository<Property, Long>{
     private String getEntityClassName() {
         return Property.class.getName();
     }
-    
+
     @Override
     @Transactional
     public List findAll() {
@@ -35,14 +37,13 @@ public class PropertyRepository implements Repository<Property, Long>{
                 = entityManager.createQuery("from " + getEntityClassName(), getEntityClass());
         return query.getResultList();
     }
-    
+
     @Override
     @Transactional
     public Property create(Property property) {
         entityManager.persist(property);
         return property;
     }
-
 
     @Override
     public Optional<Property> findById(Long id) {
@@ -51,18 +52,29 @@ public class PropertyRepository implements Repository<Property, Long>{
             return Optional.of(t);
         } catch (Exception e) {
             log.debug("An exception occured", e);
-             return Optional.empty();  
+            return Optional.empty();
         }
     }
 
-  
+
     
-    @Override
-    public boolean deleteById(Long id) {
+    public List<Property> findPropertiesByOwnersId(Long ownerId) {
+        try {
+            TypedQuery<Property> query = entityManager.createQuery(
+                    "SELECT p FROM Property p WHERE p.owner.id = :ownerId", Property.class);
+            query.setParameter("ownerId", ownerId);
+            return query.getResultList();
+        } catch (Exception e) {
+            log.debug("An exception occurred", e);
+            return Collections.emptyList();
+        }
+    }
+
+        public boolean changeVisabilityById(Long id, boolean deleted) {
         Property property = entityManager.find(Property.class, id);
         if (property != null) {
             try {
-                property.setDeleted(true);
+                property.setDeleted(deleted);
                 entityManager.merge(property);
             } catch (Exception e) {
                 System.out.println("An exception occurred");
@@ -72,5 +84,14 @@ public class PropertyRepository implements Repository<Property, Long>{
         return false;
     }
     
+    @Override
+    public boolean deleteById(Long id) {
+        return changeVisabilityById(id, true);
+    }
     
+    @Override
+    public boolean unDeleteById(Long id) {
+        return changeVisabilityById(id, false);
+    }
+
 }

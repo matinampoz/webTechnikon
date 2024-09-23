@@ -36,6 +36,21 @@ public class PropertyResource {
         return propertyService.getAll();
     }
     
+    @Path("/propertiesOfOwner/{ownersId}")  
+    @GET
+    @Produces("text/json")
+    public List<Property> getPropertiesByUsersId(@PathParam ("ownersId") Long ownersId) throws  WebApplicationException {
+        try {
+            return propertyService.findPropertiesByUsersId(ownersId);
+        } catch (PropertyException ex) {
+            Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebApplicationException("Properties not found for ID: " + ownersId, Response.Status.NOT_FOUND);
+        } catch (Exception ex) {
+            Logger.getLogger(PropertyResource.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @Path("{propertyId}")   
     @GET
     @Produces("text/json")

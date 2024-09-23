@@ -12,7 +12,8 @@ import java.util.List;
  * @author matin
  */
 @RequestScoped
-public class PropertyService implements Service<Property, Long>{
+public class PropertyService implements Service<Property, Long> {
+
     @Inject
     private PropertyRepository propertyRepository;
 
@@ -28,17 +29,29 @@ public class PropertyService implements Service<Property, Long>{
     }
 
     @Override
-    public Property findById(Long k) throws PropertyException{
+    public Property findById(Long k) throws PropertyException {
         if (k == null) {
             throw new PropertyException("Invalid id");
         }
-        
+
         return propertyRepository.findById(k)
-                          .orElseThrow(() -> new PropertyException("id not found"));
+                .orElseThrow(() -> new PropertyException("id not found"));
+
+    }
     
+     public List<Property> findPropertiesByUsersId(Long k) throws PropertyException {
+        if (k == null) {
+            throw new PropertyException("Invalid id");
+        }
+
+        List<Property> properties = propertyRepository.findPropertiesByOwnersId(k);
+        if (properties.isEmpty()) {
+            throw new PropertyException("id not found");
+        }
+
+        return properties;
     }
 
-    
     @Override
     public boolean delete(Long id) throws PropertyException {
         if (id == null) {
@@ -46,6 +59,7 @@ public class PropertyService implements Service<Property, Long>{
         }
         return propertyRepository.deleteById(id);
     }
-    
-    
+
+   
+
 }

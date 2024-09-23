@@ -8,7 +8,6 @@ import java.util.Optional;
  * @author matin
  */
 public interface Repository<T, K> {
-     //Optional<T> findById(K id);
 
     List<T> findAll();
 
@@ -17,4 +16,6 @@ public interface Repository<T, K> {
     Optional<T> findById(K k);
 
     boolean deleteById(K id);
+    
+    boolean unDeleteById(K id);
 }

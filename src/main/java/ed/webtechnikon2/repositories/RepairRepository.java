@@ -55,12 +55,11 @@ public class RepairRepository implements Repository<Repair, Long>{
         }
     }
 
-     @Override
-    public boolean deleteById(Long id) {
+    public boolean changeVisabilityById(Long id, boolean deleted) {
         Repair repair = entityManager.find(Repair.class, id);
         if (repair != null) {
             try {
-                repair.setDeleted(true);
+                repair.setDeleted(deleted);
                 entityManager.merge(repair);
             } catch (Exception e) {
                 System.out.println("An exception occurred");
@@ -68,6 +67,16 @@ public class RepairRepository implements Repository<Repair, Long>{
             return true;
         }
         return false;
+    }
+    
+    @Override
+    public boolean deleteById(Long id) {
+        return changeVisabilityById(id, true);
+    }
+    
+    @Override
+    public boolean unDeleteById(Long id) {
+        return changeVisabilityById(id, false);
     }
     
     

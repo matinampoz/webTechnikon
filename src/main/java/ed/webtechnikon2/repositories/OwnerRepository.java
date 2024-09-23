@@ -69,12 +69,11 @@ public class OwnerRepository implements Repository<Owner, Long> {
         return owner;
     }
 
-    @Override
-    public boolean deleteById(Long id) {
+    public boolean changeVisabilityById(Long id, boolean deleted) {
         Owner owner = entityManager.find(Owner.class, id);
         if (owner != null) {
             try {
-                owner.setDeleted(true);
+                owner.setDeleted(deleted);
                 entityManager.merge(owner);
             } catch (Exception e) {
                 System.out.println("An exception occurred");
@@ -82,5 +81,15 @@ public class OwnerRepository implements Repository<Owner, Long> {
             return true;
         }
         return false;
+    }
+    
+    @Override
+    public boolean deleteById(Long id) {
+        return changeVisabilityById(id, true);
+    }
+    
+    @Override
+    public boolean unDeleteById(Long id) {
+        return changeVisabilityById(id, false);
     }
 }
