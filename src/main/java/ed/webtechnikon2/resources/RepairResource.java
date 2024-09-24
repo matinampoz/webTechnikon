@@ -50,6 +50,21 @@ public class RepairResource {
         }
     }
     
+    @Path("/repairsOfOwner/{ownersId}")  
+    @GET
+    @Produces("text/json")
+    public List<Repair> getRepairsByUsersId(@PathParam ("ownersId") Long ownersId) throws  WebApplicationException {
+        try {
+            return repairService.findRepairsByUsersId(ownersId);
+        } catch (RepairException ex) {
+            Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebApplicationException("Repairs not found for ID: " + ownersId, Response.Status.NOT_FOUND);
+        } catch (Exception ex) {
+            Logger.getLogger(RepairResource.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
      @Path("add")
     @POST
     @Consumes("application/json")

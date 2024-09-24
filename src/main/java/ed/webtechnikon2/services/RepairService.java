@@ -12,7 +12,8 @@ import java.util.List;
  * @author matin
  */
 @RequestScoped
-public class RepairService implements Service<Repair, Long>{
+public class RepairService implements Service<Repair, Long> {
+
     @Inject
     private RepairRepository repairRepository;
 
@@ -28,19 +29,29 @@ public class RepairService implements Service<Repair, Long>{
     }
 
     @Override
-    public Repair findById(Long k) throws RepairException{
+    public Repair findById(Long k) throws RepairException {
         if (k == null) {
             throw new RepairException("Invalid id");
         }
-        
+
         return repairRepository.findById(k)
-                          .orElseThrow(() -> new RepairException("id not found"));
-    
+                .orElseThrow(() -> new RepairException("id not found"));
+
     }
 
+    public List<Repair> findRepairsByUsersId(Long k) throws RepairException {
+        if (k == null) {
+            throw new RepairException("Invalid id");
+        }
 
-    
-    
+        List<Repair> properties = repairRepository.findRepairsByOwnersId(k);
+        if (properties.isEmpty()) {
+            throw new RepairException("id not found");
+        }
+
+        return properties;
+    }
+
     @Override
     public boolean delete(Long id) throws RepairException {
         if (id == null) {
@@ -48,5 +59,5 @@ public class RepairService implements Service<Repair, Long>{
         }
         return repairRepository.deleteById(id);
     }
-    
+
 }

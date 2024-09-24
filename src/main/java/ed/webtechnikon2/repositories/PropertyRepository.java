@@ -69,6 +69,18 @@ public class PropertyRepository implements Repository<Property, Long> {
             return Collections.emptyList();
         }
     }
+    
+    public List<Property> findPropertiesByOwnersVat(String vat) {
+        try {
+            TypedQuery<Property> query = entityManager.createQuery(
+                    "SELECT p FROM Property p WHERE p.owner.vat = :vat", Property.class);
+            query.setParameter("vat", vat);
+            return query.getResultList();
+        } catch (Exception e) {
+            log.debug("An exception occurred", e);
+            return Collections.emptyList();
+        }
+    }
 
         public boolean changeVisabilityById(Long id, boolean deleted) {
         Property property = entityManager.find(Property.class, id);

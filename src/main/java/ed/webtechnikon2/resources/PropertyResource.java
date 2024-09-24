@@ -51,6 +51,21 @@ public class PropertyResource {
         }
     }
     
+    @Path("/propertiesOfOwner/{vat}")  
+    @GET
+    @Produces("text/json")
+    public List<Property> findPropertiesByUsersVat (@PathParam ("vat") String vat) throws  WebApplicationException {
+        try {
+            return propertyService.findPropertiesByUsersVat(vat);
+        } catch (PropertyException ex) {
+            Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebApplicationException("Properties not found for Vat: " + vat, Response.Status.NOT_FOUND);
+        } catch (Exception ex) {
+            Logger.getLogger(PropertyResource.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @Path("{propertyId}")   
     @GET
     @Produces("text/json")

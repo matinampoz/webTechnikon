@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +56,18 @@ public class RepairRepository implements Repository<Repair, Long>{
         }
     }
 
+    public List<Repair> findRepairsByOwnersId(Long ownerId) {
+        try {
+            TypedQuery<Repair> query = entityManager.createQuery(
+                    "SELECT p FROM Property p WHERE p.owner.id = :ownerId", Repair.class);
+            query.setParameter("ownerId", ownerId);
+            return query.getResultList();
+        } catch (Exception e) {
+            log.debug("An exception occurred", e);
+            return Collections.emptyList();
+        }
+    }
+    
     public boolean changeVisabilityById(Long id, boolean deleted) {
         Repair repair = entityManager.find(Repair.class, id);
         if (repair != null) {

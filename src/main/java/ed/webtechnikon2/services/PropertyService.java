@@ -51,6 +51,19 @@ public class PropertyService implements Service<Property, Long> {
 
         return properties;
     }
+     
+     public List<Property> findPropertiesByUsersVat(String k) throws PropertyException {
+        if (k == null) {
+            throw new PropertyException("Invalid vat");
+        }
+
+        List<Property> properties = propertyRepository.findPropertiesByOwnersVat(k);
+        if (properties.isEmpty()) {
+            throw new PropertyException("id not found");
+        }
+
+        return properties;
+    }
 
     @Override
     public boolean delete(Long id) throws PropertyException {
