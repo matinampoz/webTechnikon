@@ -3,11 +3,14 @@ package ed.webtechnikon2.repositories;
 import ed.webtechnikon2.modeles.Owner;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -50,16 +53,26 @@ public class OwnerRepository implements Repository<Owner, Long> {
 
     @Transactional
     public Owner findOwnerByVat(String vat) {
-        TypedQuery<Owner> typedQuery = entityManager.createQuery("from Owner where vat =: data", Owner.class);
-        typedQuery.setParameter("data", vat);
-        return typedQuery.getSingleResult();
+        try {
+            TypedQuery<Owner> typedQuery = entityManager.createQuery("from Owner where vatNumber =: data", Owner.class);
+            typedQuery.setParameter("data", vat);
+            return typedQuery.getSingleResult();
+        } catch (NoResultException ex) {
+            Logger.getLogger(OwnerRepository.class.getName()).log(Level.WARNING, "No owner found with VAT: ", vat);
+            return null;
+        }
     }
 
     @Transactional
     public Owner findOwnerByEmail(String email) {
-        TypedQuery<Owner> typedQuery = entityManager.createQuery("from Owner where email =: data", Owner.class);
-        typedQuery.setParameter("data", email);
-        return typedQuery.getSingleResult();
+        try {
+            TypedQuery<Owner> typedQuery = entityManager.createQuery("from Owner where email =: data", Owner.class);
+            typedQuery.setParameter("data", email);
+            return typedQuery.getSingleResult();
+        } catch (NoResultException ex) {
+            Logger.getLogger(OwnerRepository.class.getName()).log(Level.WARNING, "No owner found with email: ", email);
+            return null;
+        }
     }
 
     @Override
@@ -82,12 +95,12 @@ public class OwnerRepository implements Repository<Owner, Long> {
         }
         return false;
     }
-    
+
     @Override
     public boolean deleteById(Long id) {
         return changeVisabilityById(id, true);
     }
-    
+
     @Override
     public boolean unDeleteById(Long id) {
         return changeVisabilityById(id, false);

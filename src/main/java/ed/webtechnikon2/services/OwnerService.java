@@ -12,41 +12,49 @@ import java.util.List;
  * @author matin
  */
 @RequestScoped
-public class OwnerService implements Service<Owner, Long>{
-    
+public class OwnerService implements Service<Owner, Long> {
+
     @Inject
-    private   OwnerRepository ownerRepository;
-    
+    private OwnerRepository ownerRepository;
+
     @Override
     public List<Owner> getAll() {
         return ownerRepository.findAll();
     }
 
     @Override
-    public Owner findById(Long k) throws OwnerException{
+    public Owner findById(Long k) throws OwnerException {
         if (k == null) {
             throw new OwnerException("Invalid id");
         }
-        
+
         return ownerRepository.findById(k)
-                          .orElseThrow(() -> new OwnerException("id not found"));
-    
+                .orElseThrow(() -> new OwnerException("id not found"));
+
     }
-    
+
     public Owner findOwnerByVat(String vatNumber) throws OwnerException {
         if (vatNumber == null) {
             throw new OwnerException("Invalid vat number");
         }
-        return ownerRepository.findOwnerByVat(vatNumber);
+        Owner owner = ownerRepository.findOwnerByVat(vatNumber);
+        if (owner == null) {
+            throw new OwnerException("Owner not found for VAT: " + vatNumber);
+        }
+        return owner;
     }
 
-    public Owner findOwnerByEmail(String email) throws OwnerException {
-        if (email == null || !email.contains("@")) {
+   public Owner findOwnerByEmail(String email) throws OwnerException {
+        if (email == null) {
             throw new OwnerException("Invalid email");
         }
-        return ownerRepository.findOwnerByEmail(email);
+        Owner owner = ownerRepository.findOwnerByEmail(email);
+        if (owner == null) {
+            throw new OwnerException("Owner not found for email: " + email);
+        }
+        return owner;
     }
-    
+
     @Override
     public boolean delete(Long id) throws OwnerException {
         if (id == null) {
@@ -54,11 +62,11 @@ public class OwnerService implements Service<Owner, Long>{
         }
         return ownerRepository.deleteById(id);
     }
-    
+
     @Override
     public Long create(Owner owner) throws OwnerException {
         ownerRepository.create(owner);
         return owner.getOwnerId();
     }
-    
+
 }

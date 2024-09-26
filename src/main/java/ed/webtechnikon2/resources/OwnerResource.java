@@ -57,12 +57,14 @@ public class OwnerResource {
         }
     }
 
-    @Path("vat/{ownerId}")
+    @Path("vat/{vat}")
     @GET
     @Produces("text/json")
     public Owner getOwnerByVat(@PathParam("vat") String vat) throws WebApplicationException {
         try {
-            return ownerService.findOwnerByVat(vat);
+            Owner owner = ownerService.findOwnerByVat(vat);
+            Logger.getLogger(OwnerResource.class.getName()).log(Level.INFO, "Found owner: {0}", owner);
+            return owner;
         } catch (OwnerException ex) {
             Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
             throw new WebApplicationException("Owner not found for Vat: " + vat, Response.Status.NOT_FOUND);
@@ -105,5 +107,21 @@ public class OwnerResource {
     @Produces("application/json")
     public boolean delete(@PathParam("ownerId") Long ownerId) throws OwnerException {
         return ownerService.delete(ownerId);
+    }
+
+    @Path("details/{ownerId}")
+    @GET
+    @Produces("text/plain")
+    public String showOwnerDetails(@PathParam("ownerId") Long ownerId) throws WebApplicationException {
+        try {
+            Owner owner = ownerService.findById(ownerId);
+            return owner.toString();
+        } catch (OwnerException ex) {
+            Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebApplicationException("Owner not found for ID: " + ownerId, Response.Status.NOT_FOUND);
+        } catch (Exception ex) {
+            Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
+        }
     }
 }

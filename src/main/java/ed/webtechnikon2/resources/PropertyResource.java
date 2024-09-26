@@ -35,11 +35,11 @@ public class PropertyResource {
     public List<Property> getAllProperties() {
         return propertyService.getAll();
     }
-    
-    @Path("/propertiesOfOwner/{ownersId}")  
+
+    @Path("/propertiesOfOwner/{ownersId}")
     @GET
     @Produces("text/json")
-    public List<Property> getPropertiesByUsersId(@PathParam ("ownersId") Long ownersId) throws  WebApplicationException {
+    public List<Property> getPropertiesByUsersId(@PathParam("ownersId") Long ownersId) throws WebApplicationException {
         try {
             return propertyService.findPropertiesByUsersId(ownersId);
         } catch (PropertyException ex) {
@@ -50,11 +50,11 @@ public class PropertyResource {
             throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    @Path("/propertiesOfOwner/{vat}")  
+
+    @Path("/propertiesOfOwner/{vat}")
     @GET
     @Produces("text/json")
-    public List<Property> findPropertiesByUsersVat (@PathParam ("vat") String vat) throws  WebApplicationException {
+    public List<Property> findPropertiesByUsersVat(@PathParam("vat") String vat) throws WebApplicationException {
         try {
             return propertyService.findPropertiesByUsersVat(vat);
         } catch (PropertyException ex) {
@@ -65,11 +65,11 @@ public class PropertyResource {
             throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    @Path("{propertyId}")   
+
+    @Path("{propertyId}")
     @GET
     @Produces("text/json")
-    public Property getPropertyById(@PathParam ("propertyId") Long propertyId) throws  WebApplicationException {
+    public Property getPropertyById(@PathParam("propertyId") Long propertyId) throws WebApplicationException {
         try {
             return propertyService.findById(propertyId);
         } catch (PropertyException ex) {
@@ -80,7 +80,7 @@ public class PropertyResource {
             throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     @Path("add")
     @POST
     @Consumes("application/json")
@@ -92,13 +92,29 @@ public class PropertyResource {
         return property.getPropertyId();
 
     }
-    
+
     @Path("delete/{propertyId}")
     @DELETE
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean delete(@PathParam("propertyId") Long propertyId) throws PropertyException{
+    public boolean delete(@PathParam("propertyId") Long propertyId) throws PropertyException {
         return propertyService.delete(propertyId);
     }
-    
+
+    @Path("details/{propertyId}")
+    @GET
+    @Produces("text/plain")
+    public String showPropertyDetails(@PathParam("propertyId") Long propertyId) throws WebApplicationException {
+        try {
+            Property property = propertyService.findById(propertyId);
+            return property.toString();
+        } catch (PropertyException ex) {
+            Logger.getLogger(PropertyResource.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebApplicationException("Property not found for ID: " + propertyId, Response.Status.NOT_FOUND);
+        } catch (Exception ex) {
+            Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
