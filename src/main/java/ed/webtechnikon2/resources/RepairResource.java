@@ -31,6 +31,7 @@ public class RepairResource {
     @Inject
     private RepairService repairService;
 
+    //http://localhost:8080/Technikon/resources/repair/repairs
     @Path("repairs")
     @GET
     @Produces("text/json")
@@ -41,6 +42,7 @@ public class RepairResource {
                 .collect(Collectors.toList());
     }
 
+    //http://localhost:8080/Technikon/resources/repair/1
     @Path("{repairId}")
     @GET
     @Produces("text/json")
@@ -58,6 +60,8 @@ public class RepairResource {
         }
     }
 
+    //http://localhost:8080/Technikon/resources/repair/repairsOfOwner/1
+    //not done. this function will be availiablei in the upcoming release using DTO class to avoid back reference
     @Path("/repairsOfOwner/{ownersId}")
     @GET
     @Produces("text/json")
@@ -73,6 +77,7 @@ public class RepairResource {
         }
     }
 
+    //http://localhost:8080/Technikon/resources/repair/add
     @Path("add")
     @POST
     @Consumes("application/json")
@@ -85,6 +90,7 @@ public class RepairResource {
 
     }
 
+     //http://localhost:8080/Technikon/resources/repair/delete/1
     @Path("delete/{repairId}")
     @DELETE
     @Consumes("application/json")

@@ -31,6 +31,7 @@ public class PropertyResource {
     @Inject
     private PropertyService propertyService;
 
+    //http://localhost:8080/Technikon/resources/property/properties
     @Path("properties")
     @GET
     @Produces("text/json")
@@ -41,6 +42,7 @@ public class PropertyResource {
                           .collect(Collectors.toList());
 }
 
+    //http://localhost:8080/Technikon/resources/property/propertiesOfOwner/1
     @Path("/propertiesOfOwner/{ownersId}")
     @GET
     @Produces("text/json")
@@ -59,6 +61,7 @@ public class PropertyResource {
         }
     }
 
+    //http://localhost:8080/Technikon/resources/owner/vat/12345
     @Path("/propertiesOfOwnerWithVat/{vat}")
     @GET
     @Produces("text/json")
@@ -77,6 +80,7 @@ public class PropertyResource {
         }
     }
 
+    //http://localhost:8080/Technikon/resources/owner/id/1
     @Path("{propertyId}")
     @GET
     @Produces("text/json")
@@ -93,7 +97,8 @@ public class PropertyResource {
             throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
+    //http://localhost:8080/Technikon/resources/repair/add
     @Path("add")
     @POST
     @Consumes("application/json")
@@ -106,6 +111,7 @@ public class PropertyResource {
 
     }
 
+    //http://localhost:8080/Technikon/resources/property/delete/1
     @Path("delete/{propertyId}")
     @DELETE
     @Consumes("application/json")
@@ -114,20 +120,20 @@ public class PropertyResource {
         return propertyService.delete(propertyId);
     }
 
-    @Path("details/{propertyId}")
-    @GET
-    @Produces("text/plain")
-    public String showPropertyDetails(@PathParam("propertyId") Long propertyId) throws WebApplicationException {
-        try {
-            Property property = propertyService.findById(propertyId);
-            return property.toString();
-        } catch (PropertyException ex) {
-            Logger.getLogger(PropertyResource.class.getName()).log(Level.SEVERE, null, ex);
-            throw new WebApplicationException("Property not found for ID: " + propertyId, Response.Status.NOT_FOUND);
-        } catch (Exception ex) {
-            Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
-            throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @Path("details/{propertyId}")
+//    @GET
+//    @Produces("text/plain")
+//    public String showPropertyDetails(@PathParam("propertyId") Long propertyId) throws WebApplicationException {
+//        try {
+//            Property property = propertyService.findById(propertyId);
+//            return property.toString();
+//        } catch (PropertyException ex) {
+//            Logger.getLogger(PropertyResource.class.getName()).log(Level.SEVERE, null, ex);
+//            throw new WebApplicationException("Property not found for ID: " + propertyId, Response.Status.NOT_FOUND);
+//        } catch (Exception ex) {
+//            Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
+//            throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
 }

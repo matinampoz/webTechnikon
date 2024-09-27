@@ -37,6 +37,7 @@ public class OwnerResource {
         return "welcome to technikon";
     }
 
+    //http://localhost:8080/Technikon/resources/owner/properyOwners
     @Path("properyOwners")
     @GET
     @Produces("text/json")
@@ -47,6 +48,7 @@ public class OwnerResource {
                                 .collect(Collectors.toList());
     }
 
+    //http://localhost:8080/Technikon/resources/owner/id/1
     @Path("id/{ownerId}")
     @GET
     @Produces("text/json")
@@ -65,6 +67,7 @@ public class OwnerResource {
         }
     }
 
+    //http://localhost:8080/Technikon/resources/owner/vat/12345
     @Path("vat/{vat}")
     @GET
     @Produces("text/json")
@@ -87,6 +90,7 @@ public class OwnerResource {
         }
     }
 
+    //http://localhost:8080/Technikon/resources/owner/email/tade 
     @Path("email/{email}")
     @GET
     @Produces("text/json")
@@ -108,6 +112,7 @@ public class OwnerResource {
         }
     }
 
+    //http://localhost:8080/Technikon/resources/owner/add
     @Path("add")
     @POST
     @Consumes("application/json")
@@ -120,6 +125,7 @@ public class OwnerResource {
 
     }
 
+    //http://localhost:8080/Technikon/resources/owner/delete/1
     @Path("delete/{ownerId}")
     @DELETE
     @Consumes("application/json")
@@ -128,23 +134,23 @@ public class OwnerResource {
         return ownerService.delete(ownerId);
     }
 
-    @Path("details/{ownerId}")
-    @GET
-    @Produces("text/plain")
-    public String showOwnerDetails(@PathParam("ownerId") Long ownerId) throws WebApplicationException {
-        try {
-            Owner owner = ownerService.findById(ownerId);
-            return owner.toString();
-
-        } catch (OwnerException ex) {
-            Logger.getLogger(OwnerResource.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            throw new WebApplicationException("Owner not found for ID: " + ownerId, Response.Status.NOT_FOUND);
-
-        } catch (Exception ex) {
-            Logger.getLogger(OwnerResource.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @Path("details/{ownerId}")
+//    @GET
+//    @Produces("text/plain")
+//    public String showOwnerDetails(@PathParam("ownerId") Long ownerId) throws WebApplicationException {
+//        try {
+//            Owner owner = ownerService.findById(ownerId);
+//            return owner.toString();
+//
+//        } catch (OwnerException ex) {
+//            Logger.getLogger(OwnerResource.class
+//                    .getName()).log(Level.SEVERE, null, ex);
+//            throw new WebApplicationException("Owner not found for ID: " + ownerId, Response.Status.NOT_FOUND);
+//
+//        } catch (Exception ex) {
+//            Logger.getLogger(OwnerResource.class
+//                    .getName()).log(Level.SEVERE, null, ex);
+//            throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 }
