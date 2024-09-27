@@ -29,7 +29,7 @@ public class Repair {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long repairId;
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne
     @JoinColumn(name = "propertyId", referencedColumnName = "propertyId")
     private Property property;

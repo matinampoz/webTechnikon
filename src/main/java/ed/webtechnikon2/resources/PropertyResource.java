@@ -17,6 +17,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -33,9 +34,12 @@ public class PropertyResource {
     @Path("properties")
     @GET
     @Produces("text/json")
-    public List<Property> getAllProperties() {
-        return propertyService.getAll();
-    }
+    public List<PropertyDTO> getAllProperties() {
+    return propertyService.getAll()
+                          .stream()
+                          .map(PropertyDTO::new) 
+                          .collect(Collectors.toList());
+}
 
     @Path("/propertiesOfOwner/{ownersId}")
     @GET

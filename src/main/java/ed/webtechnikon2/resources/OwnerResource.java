@@ -1,5 +1,6 @@
 package ed.webtechnikon2.resources;
 
+import dto.OwnerDTO;
 import ed.webtechnikon2.modeles.Owner;
 import ed.webtechnikon2.services.OwnerService;
 import exceptions.OwnerException;
@@ -16,6 +17,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -38,18 +40,21 @@ public class OwnerResource {
     @Path("properyOwners")
     @GET
     @Produces("text/json")
-    public List<Owner> getAllPropertyOwners() {
-        return ownerService.getAll();
+    public List<OwnerDTO> getAllPropertyOwners() {
+        
+        return ownerService.getAll()
+                       .stream().map(OwnerDTO::new)
+                                .collect(Collectors.toList());
     }
 
     @Path("id/{ownerId}")
     @GET
     @Produces("text/json")
-    public Owner getOwnerById(@PathParam("ownerId") Long ownerId) throws WebApplicationException {
+    public OwnerDTO getOwnerById(@PathParam("ownerId") Long ownerId) throws WebApplicationException {
         try {
             Owner owner = ownerService.findById(ownerId);
-//            OwnerDTO ownerdto = new OwnerDTO(owner);
-            return owner;
+            OwnerDTO ownerdto = new OwnerDTO(owner);
+            return ownerdto;
 
         } catch (OwnerException ex) {
             Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -63,12 +68,12 @@ public class OwnerResource {
     @Path("vat/{vat}")
     @GET
     @Produces("text/json")
-    public Owner getOwnerByVat(@PathParam("vat") String vat) throws WebApplicationException {
+    public OwnerDTO getOwnerByVat(@PathParam("vat") String vat) throws WebApplicationException {
         try {
             Owner owner = ownerService.findOwnerByVat(vat);
             Logger.getLogger(OwnerResource.class.getName()).log(Level.INFO, "Found owner: {0}", owner);
-            //OwnerDTO ownerdto = new OwnerDTO(owner);
-            return owner;
+            OwnerDTO ownerdto = new OwnerDTO(owner);
+            return ownerdto;
 
         } catch (OwnerException ex) {
             Logger.getLogger(OwnerResource.class
@@ -85,11 +90,11 @@ public class OwnerResource {
     @Path("email/{email}")
     @GET
     @Produces("text/json")
-    public Owner getOwnerByEmail(@PathParam("email") String email) throws WebApplicationException {
+    public OwnerDTO getOwnerByEmail(@PathParam("email") String email) throws WebApplicationException {
         try {
             Owner owner = ownerService.findOwnerByEmail(email);
-            //OwnerDTO ownerdto = new OwnerDTO(owner);
-            return owner;
+            OwnerDTO ownerdto = new OwnerDTO(owner);
+            return ownerdto;
 
         } catch (OwnerException ex) {
             Logger.getLogger(OwnerResource.class

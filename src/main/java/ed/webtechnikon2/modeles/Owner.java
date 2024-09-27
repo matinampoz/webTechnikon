@@ -39,7 +39,7 @@ public class Owner {
     @Enumerated(EnumType.STRING)
     private UserType userType = UserType.OWNER;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "propertyOwner")
     List<Property> properties;
     

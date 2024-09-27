@@ -1,5 +1,6 @@
 package ed.webtechnikon2.resources;
 
+import dto.RepairDTO;
 import ed.webtechnikon2.modeles.Repair;
 import ed.webtechnikon2.services.RepairService;
 import exceptions.RepairException;
@@ -16,6 +17,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -25,22 +27,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Path("repair")
 public class RepairResource {
+
     @Inject
     private RepairService repairService;
-    
+
     @Path("repairs")
     @GET
     @Produces("text/json")
-    public List<Repair> getAllPropertyOwners() {
-        return repairService.getAll();
+    public List<RepairDTO> getAllRepairs() {
+        return repairService.getAll()
+                .stream()
+                .map(RepairDTO::new)
+                .collect(Collectors.toList());
     }
-    
+
     @Path("{repairId}")
     @GET
     @Produces("text/json")
-    public Repair getRepairById(@PathParam ("repairId") Long repairId) throws  WebApplicationException {
+    public RepairDTO getRepairById(@PathParam("repairId") Long repairId) throws WebApplicationException {
         try {
-            return repairService.findById(repairId);
+            Repair repair = repairService.findById(repairId);
+            RepairDTO repairDTO = new RepairDTO(repair);
+            return repairDTO;
         } catch (RepairException ex) {
             Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
             throw new WebApplicationException("Repair not found for ID: " + repairId, Response.Status.NOT_FOUND);
@@ -49,11 +57,11 @@ public class RepairResource {
             throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    @Path("/repairsOfOwner/{ownersId}")  
+
+    @Path("/repairsOfOwner/{ownersId}")
     @GET
     @Produces("text/json")
-    public List<Repair> getRepairsByUsersId(@PathParam ("ownersId") Long ownersId) throws  WebApplicationException {
+    public List<Repair> getRepairsByUsersId(@PathParam("ownersId") Long ownersId) throws WebApplicationException {
         try {
             return repairService.findRepairsByUsersId(ownersId);
         } catch (RepairException ex) {
@@ -64,8 +72,8 @@ public class RepairResource {
             throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
-    
-     @Path("add")
+
+    @Path("add")
     @POST
     @Consumes("application/json")
     @Produces("application/json")
@@ -76,7 +84,7 @@ public class RepairResource {
         return repair.getRepairId();
 
     }
-    
+
     @Path("delete/{repairId}")
     @DELETE
     @Consumes("application/json")

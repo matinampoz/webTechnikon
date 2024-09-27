@@ -35,6 +35,7 @@ public class Property {
     private String e9;
     private String address;
     private int yearOfConstruction;
+    
     @Enumerated(EnumType.STRING)
     private PropertyType typeOfProperty;
 
@@ -42,7 +43,7 @@ public class Property {
     @JoinColumn(name = "ownerId", referencedColumnName = "ownerId")
     private Owner propertyOwner;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "property")
     private List<Repair> repairs;
     
