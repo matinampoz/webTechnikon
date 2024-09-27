@@ -9,7 +9,7 @@ import java.util.Optional;
  */
 public interface Repository<T, K> {
 
-    List<T> findAll();
+   // List<T> findAll();
 
     T create(T t);
     

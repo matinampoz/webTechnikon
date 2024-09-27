@@ -6,6 +6,7 @@ import exceptions.PropertyException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -23,7 +24,7 @@ public class PropertyService implements Service<Property, Long> {
         return property.getPropertyId();
     }
 
-    @Override
+    //@Override
     public List<Property> getAll() {
         return propertyRepository.findAll();
     }
@@ -38,31 +39,24 @@ public class PropertyService implements Service<Property, Long> {
                 .orElseThrow(() -> new PropertyException("id not found"));
 
     }
-    
-     public List<Property> findPropertiesByUsersId(Long k) throws PropertyException {
+
+    public Property findPropertiesByUsersId(Long k) throws PropertyException {
         if (k == null) {
             throw new PropertyException("Invalid id");
         }
 
-        List<Property> properties = propertyRepository.findPropertiesByOwnersId(k);
-        if (properties.isEmpty()) {
-            throw new PropertyException("id not found");
-        }
-
-        return properties;
+        Optional<Property> properties = propertyRepository.findPropertiesByOwnersId(k);
+        return properties.orElseThrow(() -> new PropertyException("Property not found for ID: " + k));
     }
-     
-     public List<Property> findPropertiesByUsersVat(String k) throws PropertyException {
+
+    public Property findPropertiesByUsersVat(String k) throws PropertyException {
         if (k == null) {
             throw new PropertyException("Invalid vat");
         }
 
-        List<Property> properties = propertyRepository.findPropertiesByOwnersVat(k);
-        if (properties.isEmpty()) {
-            throw new PropertyException("id not found");
-        }
+        Optional<Property> properties = propertyRepository.findPropertiesByOwnersVat(k);
 
-        return properties;
+        return properties.orElseThrow(() -> new PropertyException("Property not found for VAT: " + k));
     }
 
     @Override
@@ -72,7 +66,5 @@ public class PropertyService implements Service<Property, Long> {
         }
         return propertyRepository.deleteById(id);
     }
-
-   
 
 }

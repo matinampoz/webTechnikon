@@ -17,7 +17,7 @@ public class OwnerService implements Service<Owner, Long> {
     @Inject
     private OwnerRepository ownerRepository;
 
-    @Override
+    //@Override
     public List<Owner> getAll() {
         return ownerRepository.findAll();
     }

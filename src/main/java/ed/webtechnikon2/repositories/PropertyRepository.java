@@ -3,10 +3,10 @@ package ed.webtechnikon2.repositories;
 import ed.webtechnikon2.modeles.Property;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class PropertyRepository implements Repository<Property, Long> {
         return Property.class.getName();
     }
 
-    @Override
+    //@Override
     @Transactional
     public List findAll() {
         TypedQuery<Property> query
@@ -56,33 +56,37 @@ public class PropertyRepository implements Repository<Property, Long> {
         }
     }
 
-
-    
-    public List<Property> findPropertiesByOwnersId(Long ownerId) {
+    public Optional<Property> findPropertiesByOwnersId(Long ownerId) {
         try {
             TypedQuery<Property> query = entityManager.createQuery(
-                    "SELECT p FROM Property p WHERE p.owner.id = :ownerId", Property.class);
+                    "SELECT p FROM Property p WHERE p.propertyOwner.ownerId = :ownerId", Property.class);
             query.setParameter("ownerId", ownerId);
-            return query.getResultList();
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+            log.debug("No property found for ID: " + ownerId, e);
+            return Optional.empty();
         } catch (Exception e) {
             log.debug("An exception occurred", e);
-            return Collections.emptyList();
-        }
-    }
-    
-    public List<Property> findPropertiesByOwnersVat(String vat) {
-        try {
-            TypedQuery<Property> query = entityManager.createQuery(
-                    "SELECT p FROM Property p WHERE p.owner.vat = :vat", Property.class);
-            query.setParameter("vat", vat);
-            return query.getResultList();
-        } catch (Exception e) {
-            log.debug("An exception occurred", e);
-            return Collections.emptyList();
+            return Optional.empty();
         }
     }
 
-        public boolean changeVisabilityById(Long id, boolean deleted) {
+    public Optional<Property> findPropertiesByOwnersVat(String vat) {
+        try {
+            TypedQuery<Property> query = entityManager.createQuery(
+                    "SELECT p FROM Property p WHERE p.propertOwner.vatNumber = :vat", Property.class);
+            query.setParameter("vat", vat);
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+            log.debug("No property found for VAT: " + vat, e);
+            return Optional.empty();
+        } catch (Exception e) {
+            log.debug("An exception occurred", e);
+            return Optional.empty();
+        }
+    }
+
+    public boolean changeVisabilityById(Long id, boolean deleted) {
         Property property = entityManager.find(Property.class, id);
         if (property != null) {
             try {
@@ -95,12 +99,12 @@ public class PropertyRepository implements Repository<Property, Long> {
         }
         return false;
     }
-    
+
     @Override
     public boolean deleteById(Long id) {
         return changeVisabilityById(id, true);
     }
-    
+
     @Override
     public boolean unDeleteById(Long id) {
         return changeVisabilityById(id, false);

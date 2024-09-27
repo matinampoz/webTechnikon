@@ -23,7 +23,7 @@ public class RepairService implements Service<Repair, Long> {
         return repair.getRepairId();
     }
 
-    @Override
+    //@Override
     public List<Repair> getAll() {
         return repairRepository.findAll();
     }

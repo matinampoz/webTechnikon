@@ -37,7 +37,7 @@ public class RepairRepository implements Repository<Repair, Long>{
         return repair;
     }
 
-    @Override
+    //@Override
     @Transactional
     public List findAll() {
         TypedQuery<Repair> query

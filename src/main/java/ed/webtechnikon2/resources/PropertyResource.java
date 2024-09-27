@@ -1,5 +1,6 @@
 package ed.webtechnikon2.resources;
 
+import dto.PropertyDTO;
 import ed.webtechnikon2.modeles.Property;
 import ed.webtechnikon2.services.PropertyService;
 import exceptions.PropertyException;
@@ -39,9 +40,12 @@ public class PropertyResource {
     @Path("/propertiesOfOwner/{ownersId}")
     @GET
     @Produces("text/json")
-    public List<Property> getPropertiesByUsersId(@PathParam("ownersId") Long ownersId) throws WebApplicationException {
+    public PropertyDTO getPropertiesByUsersId(@PathParam("ownersId") Long ownersId) throws WebApplicationException {
         try {
-            return propertyService.findPropertiesByUsersId(ownersId);
+            //owner has only one property
+            Property property = propertyService.findPropertiesByUsersId(ownersId);
+            PropertyDTO propertyDTO = new PropertyDTO(property);
+            return propertyDTO;
         } catch (PropertyException ex) {
             Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
             throw new WebApplicationException("Properties not found for ID: " + ownersId, Response.Status.NOT_FOUND);
@@ -51,12 +55,24 @@ public class PropertyResource {
         }
     }
 
-    @Path("/propertiesOfOwner/{vat}")
+    @Path("/propertiesOfOwnerWithVat/{vat}")
     @GET
     @Produces("text/json")
-    public List<Property> findPropertiesByUsersVat(@PathParam("vat") String vat) throws WebApplicationException {
+    public PropertyDTO findPropertiesByUsersVat(@PathParam("vat") String vat) throws WebApplicationException {
+        //owner has only one property
         try {
-            return propertyService.findPropertiesByUsersVat(vat);
+            log.debug("==========================================================================="
+                    + "======================================================================"
+                    + "========================================================================"
+                    + "=================================================================="
+                    + "==============================================================="
+                    + "=========================================================================="
+                    + "==========================================================================="
+                    + "======================================================================="
+                    + "=======================================================================");
+            Property property = propertyService.findPropertiesByUsersVat(vat);
+            PropertyDTO propertyDTO = new PropertyDTO(property);
+            return propertyDTO;
         } catch (PropertyException ex) {
             Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
             throw new WebApplicationException("Properties not found for Vat: " + vat, Response.Status.NOT_FOUND);
@@ -69,9 +85,11 @@ public class PropertyResource {
     @Path("{propertyId}")
     @GET
     @Produces("text/json")
-    public Property getPropertyById(@PathParam("propertyId") Long propertyId) throws WebApplicationException {
+    public PropertyDTO getPropertyById(@PathParam("propertyId") Long propertyId) throws WebApplicationException {
         try {
-            return propertyService.findById(propertyId);
+            Property property = propertyService.findById(propertyId);
+            PropertyDTO propertyDTO = new PropertyDTO(property);
+            return propertyDTO;
         } catch (PropertyException ex) {
             Logger.getLogger(OwnerResource.class.getName()).log(Level.SEVERE, null, ex);
             throw new WebApplicationException("Property not found for ID: " + propertyId, Response.Status.NOT_FOUND);

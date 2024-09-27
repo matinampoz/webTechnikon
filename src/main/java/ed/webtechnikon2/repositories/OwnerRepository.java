@@ -24,26 +24,28 @@ public class OwnerRepository implements Repository<Owner, Long> {
     @PersistenceContext(unitName = "Persistence")
     private EntityManager entityManager;
 
-    private Class<Owner> getEntityClass() {
-        return Owner.class;
-    }
+    public <T> Class<T> getEntityClass(Class<T> clazz) {
+    return clazz;
+}
 
-    private String getEntityClassName() {
-        return Owner.class.getName();
-    }
+    public <T> String getEntityClassName(Class<T> clazz) {
+    return clazz.getName();
+}
+    
+    
 
-    @Override
+    //@Override
     @Transactional
-    public List findAll() {
+    public List<Owner> findAll() {
         TypedQuery<Owner> query
-                = entityManager.createQuery("from " + getEntityClassName(), getEntityClass());
+                = entityManager.createQuery("from " + getEntityClassName(Owner.class), getEntityClass(Owner.class));
         return query.getResultList();
     }
 
     @Override
     public Optional<Owner> findById(Long id) {
         try {
-            Owner t = entityManager.find(getEntityClass(), id);
+            Owner t = entityManager.find(getEntityClass(Owner.class), id);
             return Optional.of(t);
         } catch (Exception e) {
             log.debug("An exception occured", e);
