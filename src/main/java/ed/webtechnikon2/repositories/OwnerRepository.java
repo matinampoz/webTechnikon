@@ -25,20 +25,19 @@ public class OwnerRepository implements Repository<Owner, Long> {
     private EntityManager entityManager;
 
     public <T> Class<T> getEntityClass(Class<T> clazz) {
-    return clazz;
-}
+        return clazz;
+    }
 
     public <T> String getEntityClassName(Class<T> clazz) {
-    return clazz.getName();
-}
-    
-    
+        return clazz.getName();
+    }
 
     //@Override
     @Transactional
     public List<Owner> findAll() {
-        TypedQuery<Owner> query
-                = entityManager.createQuery("from " + getEntityClassName(Owner.class), getEntityClass(Owner.class));
+        String entityName = getEntityClassName(Owner.class);
+        TypedQuery<Owner> query = entityManager.createQuery(
+                "FROM " + entityName + " o WHERE o.isDeleted = false", Owner.class);
         return query.getResultList();
     }
 
@@ -84,20 +83,22 @@ public class OwnerRepository implements Repository<Owner, Long> {
         return owner;
     }
 
+    @Transactional
     public boolean changeVisabilityById(Long id, boolean deleted) {
-        Owner owner = entityManager.find(Owner.class, id);
+        Owner owner = entityManager.find(getEntityClass(Owner.class), id);
         if (owner != null) {
             try {
                 owner.setDeleted(deleted);
                 entityManager.merge(owner);
+                return true;
             } catch (Exception e) {
-                System.out.println("An exception occurred");
+                System.out.println("An exception occurred2");
             }
-            return true;
         }
         return false;
     }
 
+    @Transactional
     @Override
     public boolean deleteById(Long id) {
         return changeVisabilityById(id, true);

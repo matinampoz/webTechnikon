@@ -15,15 +15,17 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  *
  * @author matin
  */
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Data
 public class Property {
 
     @Id

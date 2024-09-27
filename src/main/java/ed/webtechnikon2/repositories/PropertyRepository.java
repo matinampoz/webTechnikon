@@ -26,15 +26,16 @@ public class PropertyRepository implements Repository<Property, Long> {
         return Property.class;
     }
 
-    private String getEntityClassName() {
-        return Property.class.getName();
+    public <T> String getEntityClassName(Class<T> clazz) {
+        return clazz.getName();
     }
-
+    
     //@Override
     @Transactional
     public List findAll() {
+        String entityName = getEntityClassName(Property.class);
         TypedQuery<Property> query
-                = entityManager.createQuery("from " + getEntityClassName(), getEntityClass());
+                = entityManager.createQuery("FROM " + entityName + " p WHERE p.isDeleted = false", Property.class);
         return query.getResultList();
     }
 
@@ -74,7 +75,7 @@ public class PropertyRepository implements Repository<Property, Long> {
     public Optional<Property> findPropertiesByOwnersVat(String vat) {
         try {
             TypedQuery<Property> query = entityManager.createQuery(
-                    "SELECT p FROM Property p WHERE p.propertOwner.vatNumber = :vat", Property.class);
+                    "SELECT p FROM Property p WHERE p.propertyOwner.vatNumber = :vat", Property.class);
             query.setParameter("vat", vat);
             return Optional.of(query.getSingleResult());
         } catch (NoResultException e) {
@@ -86,6 +87,7 @@ public class PropertyRepository implements Repository<Property, Long> {
         }
     }
 
+    @Transactional
     public boolean changeVisabilityById(Long id, boolean deleted) {
         Property property = entityManager.find(Property.class, id);
         if (property != null) {
@@ -100,6 +102,7 @@ public class PropertyRepository implements Repository<Property, Long> {
         return false;
     }
 
+    @Transactional
     @Override
     public boolean deleteById(Long id) {
         return changeVisabilityById(id, true);
