@@ -98,6 +98,23 @@ public class OwnerRepository implements Repository<Owner, Long> {
         return false;
     }
 
+    //@Override
+    @Transactional
+    public Optional<Owner> update(Long id, String newName, String newVat, String newEmail) {
+        Optional<Owner> existingOwner = findById(id);
+        
+        if (existingOwner.isPresent()) {
+            Owner owner = existingOwner.get();
+            owner.setName(newName);  
+            owner.setVatNumber(newVat);
+            owner.setEmail(newEmail);
+            entityManager.merge(owner);
+            return Optional.of(owner);
+        } else {
+            return Optional.empty(); 
+        }
+    }
+
     @Transactional
     @Override
     public boolean deleteById(Long id) {

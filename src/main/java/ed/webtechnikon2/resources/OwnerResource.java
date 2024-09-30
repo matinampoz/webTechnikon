@@ -10,11 +10,13 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -42,10 +44,10 @@ public class OwnerResource {
     @GET
     @Produces("text/json")
     public List<OwnerDTO> getAllPropertyOwners() {
-        
+
         return ownerService.getAll()
-                       .stream().map(OwnerDTO::new)
-                                .collect(Collectors.toList());
+                .stream().map(OwnerDTO::new)
+                .collect(Collectors.toList());
     }
 
     //http://localhost:8080/Technikon/resources/owner/id/1
@@ -123,6 +125,22 @@ public class OwnerResource {
         ownerService.create(owner);
         return owner.getOwnerId();
 
+    }
+
+    // http://localhost:8080/Technikon/resources/owner/edit/1
+    @PUT
+    @Path("edit/{ownerId}")
+    @Consumes("Application/json")
+    @Produces("Application/json")
+    public boolean updateOwner(@PathParam("ownerId") Long ownerId, OwnerDTO updatedOwnerDTO) {
+        Optional<Owner> updated = ownerService.updateOwner(
+                ownerId,
+                updatedOwnerDTO.getName(),
+                updatedOwnerDTO.getVatNumber(),
+                updatedOwnerDTO.getEmail()
+        );
+
+        return updated.isPresent();
     }
 
     //http://localhost:8080/Technikon/resources/owner/delete/1

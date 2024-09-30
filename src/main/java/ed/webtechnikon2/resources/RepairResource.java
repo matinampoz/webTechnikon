@@ -10,6 +10,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -89,6 +90,7 @@ public class RepairResource {
         return repair.getRepairId();
 
     }
+    
 
      //http://localhost:8080/Technikon/resources/repair/delete/1
     @Path("delete/{repairId}")

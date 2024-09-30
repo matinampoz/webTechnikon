@@ -1,8 +1,6 @@
 package dto;
 
 import ed.webtechnikon2.modeles.Owner;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

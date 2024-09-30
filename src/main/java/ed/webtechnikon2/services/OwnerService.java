@@ -6,6 +6,7 @@ import exceptions.OwnerException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -44,7 +45,7 @@ public class OwnerService implements Service<Owner, Long> {
         return owner;
     }
 
-   public Owner findOwnerByEmail(String email) throws OwnerException {
+    public Owner findOwnerByEmail(String email) throws OwnerException {
         if (email == null) {
             throw new OwnerException("Invalid email");
         }
@@ -54,6 +55,10 @@ public class OwnerService implements Service<Owner, Long> {
         }
         return owner;
     }
+
+  public Optional<Owner> updateOwner(Long id, String newName, String newVat, String newEmail) {
+    return ownerRepository.update(id, newName, newVat, newEmail);
+}
 
     @Override
     public boolean delete(Long id) throws OwnerException {
