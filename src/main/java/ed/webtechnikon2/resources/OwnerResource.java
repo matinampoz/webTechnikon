@@ -42,7 +42,7 @@ public class OwnerResource {
     //http://localhost:8080/Technikon/resources/owner/properyOwners
     @Path("properyOwners")
     @GET
-    @Produces("text/json")
+    @Produces("application/json")
     public List<OwnerDTO> getAllPropertyOwners() {
 
         return ownerService.getAll()

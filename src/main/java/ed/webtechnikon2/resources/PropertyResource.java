@@ -62,7 +62,7 @@ public class PropertyResource {
         }
     }
 
-    //http://localhost:8080/Technikon/resources/owner/vat/12345
+    //http://localhost:8080/Technikon/resources/propery/propertiesOfOwnerWithVat/12345
     @Path("/propertiesOfOwnerWithVat/{vat}")
     @GET
     @Produces("text/json")
