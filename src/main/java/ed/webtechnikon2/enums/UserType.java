@@ -1,6 +1,5 @@
 package ed.webtechnikon2.enums;
 
-import jakarta.resource.spi.AdministeredObject;
 
 /**
  *

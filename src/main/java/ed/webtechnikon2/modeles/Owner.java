@@ -1,6 +1,5 @@
 package ed.webtechnikon2.modeles;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import ed.webtechnikon2.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

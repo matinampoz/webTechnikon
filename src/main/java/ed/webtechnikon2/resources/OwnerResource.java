@@ -152,23 +152,4 @@ public class OwnerResource {
         return ownerService.delete(ownerId);
     }
 
-//    @Path("details/{ownerId}")
-//    @GET
-//    @Produces("text/plain")
-//    public String showOwnerDetails(@PathParam("ownerId") Long ownerId) throws WebApplicationException {
-//        try {
-//            Owner owner = ownerService.findById(ownerId);
-//            return owner.toString();
-//
-//        } catch (OwnerException ex) {
-//            Logger.getLogger(OwnerResource.class
-//                    .getName()).log(Level.SEVERE, null, ex);
-//            throw new WebApplicationException("Owner not found for ID: " + ownerId, Response.Status.NOT_FOUND);
-//
-//        } catch (Exception ex) {
-//            Logger.getLogger(OwnerResource.class
-//                    .getName()).log(Level.SEVERE, null, ex);
-//            throw new WebApplicationException("An internal error occurred", Response.Status.INTERNAL_SERVER_ERROR);
-//        }
-//    }
 }

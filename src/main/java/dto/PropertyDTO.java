@@ -2,7 +2,6 @@ package dto;
 
 import ed.webtechnikon2.enums.PropertyType;
 import ed.webtechnikon2.modeles.Property;
-import jakarta.persistence.Id;
 import lombok.Data;
 
 /**

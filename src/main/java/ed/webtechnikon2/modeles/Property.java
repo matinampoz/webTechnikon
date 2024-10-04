@@ -1,6 +1,5 @@
 package ed.webtechnikon2.modeles;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import ed.webtechnikon2.enums.PropertyType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

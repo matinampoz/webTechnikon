@@ -1,6 +1,5 @@
 package ed.webtechnikon2.modeles;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import ed.webtechnikon2.enums.RepairStatus;
 import ed.webtechnikon2.enums.RepairType;
 import jakarta.persistence.Entity;
